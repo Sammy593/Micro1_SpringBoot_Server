@@ -11,7 +11,7 @@ public class Rol {
     private String name;
     private String description;
 
-    public Rol(String id, String name, String description) {
+    public Rol(String name, String description) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.description = description;

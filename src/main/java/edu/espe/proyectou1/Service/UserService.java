@@ -1,7 +1,9 @@
 package edu.espe.proyectou1.Service;
 
+import edu.espe.proyectou1.Model.Rol;
 import edu.espe.proyectou1.Model.User;
 import edu.espe.proyectou1.Payload.response.UserWithCounts;
+import edu.espe.proyectou1.Repository.RolRepository;
 import edu.espe.proyectou1.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private RolRepository rolRepository;
 
 
     public List<User> findAll() {
@@ -46,11 +51,11 @@ public class UserService {
         if (userOptional.isPresent()) {
             RestTemplate restTemplate = new RestTemplate();
             // Cuantos proyectos lidera
-            String url1 = "http://localhost:8081/proyect/countProjectsByUserId/" + id;
+            String url1 = "http://localhost:8080/project/countProjectsByUserId/" + id;
             ResponseEntity<String> response1 = restTemplate.getForEntity(url1, String.class);
             String countProject = response1.getBody();
             // Cuantas tareas realiza
-            String url2 = "http://localhost:8081/task/countTasksByUserId/" + id;
+            String url2 = "http://localhost:8080/task/countTasksByUserId/" + id;
             ResponseEntity<String> response2 = restTemplate.getForEntity(url2, String.class);
             String countTask = response2.getBody();
 
@@ -59,6 +64,8 @@ public class UserService {
             userRes.setNumProjects(countProject);
             userRes.setNumTasks(countTask);
 
+            Optional<Rol> rolOptional = Optional.ofNullable(rolRepository.findById(userOptional.get().getIdRol()));
+            rolOptional.ifPresent(rol -> userRes.setRolName(rol.getName()));
             return new ResponseEntity<>(userRes, HttpStatus.OK);
         } else {
             return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);

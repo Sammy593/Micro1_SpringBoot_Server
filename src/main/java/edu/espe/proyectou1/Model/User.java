@@ -14,7 +14,7 @@ public class User {
     private String state;
     private String idRol;
 
-    public User(String id, String name, String lastname, String phone, String email, String state, String idRol) {
+    public User(String name, String lastname, String phone, String email, String state, String idRol) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
         this.lastname = lastname;

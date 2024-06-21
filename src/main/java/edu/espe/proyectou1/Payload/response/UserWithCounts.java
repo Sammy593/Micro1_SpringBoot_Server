@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class UserWithCounts {
     private User user;
+    private String rolName;
     private String numProjects;
     private String numTasks;
 }
